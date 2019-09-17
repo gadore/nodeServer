@@ -1,0 +1,17 @@
+.themeDay{
+    background: white;
+    color: black;
+}
+
+.themeNight{
+    background: gray;
+    color: white;
+}
+
+.white{
+    color:white;
+}
+
+.black{
+    color: black;
+}

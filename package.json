@@ -1,0 +1,23 @@
+{
+  "name": "gadore.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./App.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gadore/gadore.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gadore/gadore.github.io/issues"
+  },
+  "homepage": "https://github.com/gadore/gadore.github.io#readme",
+  "dependencies": {
+    "mysql": "^2.17.1"
+  }
+}
