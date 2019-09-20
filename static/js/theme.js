@@ -1,7 +1,7 @@
 function setTheme(){
     var date = new Date()
     var hour = date.getHours()
-    if(hour < 6 && hour > 18){
+    if(hour > 6 && hour < 18){
         $id('body').classList.remove('themeNight')
         $id('body').classList.add('themeDay')
 

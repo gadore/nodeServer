@@ -2,7 +2,7 @@ const fs = require('fs') //引入node 文件读写fs模块
 const path = require('path') //引入 node path模块
 const resMime = require('./utils/resMime.js') //引入自定义模块，模块主要处理响应头
 
-var notfound = function(res){
+var notfound = function (res) {
     fs.readFile(path.join(__dirname, `views/404.html`), (err, data) => {
         res.writeHead(404, {
             "Content-Type": "text/html;chartset='utf8'"
@@ -12,29 +12,54 @@ var notfound = function(res){
     })
 }
 
-var router = {
-    notFoundRes:notfound,
-    handler:function(pathName, req, res) {
-        if (pathName == '/') {
-            pathName = '/index.html'
-        }
-    
-        if (pathName == '/favicon.ico') {
-            res.end()
-        }
-    
-        if (pathName.search('query') == 1) {
-            res.writeHead(200)
-            // 将HTTP响应的HTML内容写入response:
-            var data = {
+function deelQueryRequest(res, pathName) {
+    var queryName =
+        queryName = pathName.split('AAAA')[1]
+    var data = ''
+    switch (queryName) {
+        case 'test':
+            data = {
                 "name": "yy",
                 "value": "girl"
             }
-            res.write(JSON.stringify(data))
+            break
+        case 'picture':
+            data = {
+                "pic": getPictureList()
+            }
+            break
+        default:
+            break
+    }
+    res.writeHead(200)
+    // 将HTTP响应的HTML内容写入response:
+
+    res.write(JSON.stringify(data))
+    res.end()
+}
+
+function getPictureList() {
+    var testFolder = './static/img'
+    let pictureList = fs.readdirSync(testFolder);
+    return pictureList
+}
+
+var router = {
+    notFoundRes: notfound,
+    handler: function (pathName, req, res) {
+        if (pathName == '/') {
+            pathName = '/index.html'
+        }
+
+        if (pathName == '/favicon.ico') {
             res.end()
+        }
+
+        if (pathName.search('query') == 1) {
+            deelQueryRequest(res, pathName)
             return
         }
-    
+
         if (pathName != '/favicon.ico') {
             let extName = path.extname(pathName) //拿到扩展名（比如说：'index.html' => '.html'）
             fs.readFile(path.join(__dirname, pathName), function (err, data) { //绝对路径，path.join(__dirname,pathName)
