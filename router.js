@@ -13,9 +13,8 @@ var notfound = function (res) {
 }
 
 function deelQueryRequest(res, pathName) {
-    var queryName =
-        queryName = pathName.split('AAAA')[1]
-    var data = ''
+    var queryName = pathName.split('AAAA')[1]
+    var data = 'query for nothing on :' + queryName
     switch (queryName) {
         case 'test':
             data = {
@@ -39,8 +38,9 @@ function deelQueryRequest(res, pathName) {
 }
 
 function getPictureList() {
-    var testFolder = './static/img'
-    let pictureList = fs.readdirSync(testFolder);
+    var Folder = './static/img'
+    let pictureList = fs.readdirSync(Folder);
+    console.log(pictureList)
     return pictureList
 }
 
