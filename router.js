@@ -19,7 +19,8 @@ function deelQueryRequest(res, pathName) {
         case 'test':
             data = {
                 "name": "yy",
-                "value": "girl"
+                "value": "girl",
+                "ps": "test message"
             }
             break
         case 'picture':
@@ -40,7 +41,7 @@ function deelQueryRequest(res, pathName) {
 function getPictureList() {
     var Folder = './static/img'
     let pictureList = fs.readdirSync(Folder);
-    console.log(pictureList)
+    //console.log(pictureList)
     return pictureList
 }
 
