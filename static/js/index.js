@@ -15,7 +15,7 @@ function init() {
 }
 
 function buttonClick() {
-    var jqxhr = $.get('/queryAAAApicture', {
+    var jqxhr = $.get('/queryPicture', {
         name:'front'
     }).done(function (data) {
         console.log(JSON.parse(data))

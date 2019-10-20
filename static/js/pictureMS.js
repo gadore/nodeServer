@@ -4,11 +4,10 @@ function init(){
 }
 
 function getPicList(){
-    $.get('/queryAAAApicture', {
+    $.get('/queryPicture', {
         name:'front'
     }).done(function (data) {
         var temp = JSON.parse(data)
-        console.log(temp.pic)
         initDom(temp.pic)
     })
 }
@@ -23,7 +22,6 @@ function initDom(list){
 }
 
 function mkPicList(list){
-    console.log(list)
     var resList = []
     for(var i=0;i<list.length;i++){
         var temp = new Object();
