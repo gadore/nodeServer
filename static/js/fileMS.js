@@ -25,7 +25,7 @@ function mkPicList(list){
     var resList = []
     for(var i=0;i<list.length;i++){
         var temp = new Object();
-        temp.link = '../static/img/'+list[i]
+        temp.link = '../static/files/'+list[i]
         temp.name = list[i]
         resList.push(temp)
     }
