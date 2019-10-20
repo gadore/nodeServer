@@ -1,7 +1,7 @@
 const fs = require('fs') //引入node 文件读写fs模块
 const path = require('path') //引入 node path模块
 const resMime = require('./utils/resMime.js') //引入自定义模块，模块主要处理响应头
-const deelQueryPictureRequest = require('./routers/deelQueryPictureRequest')
+const deelQueryFileRequest = require('./routers/deelQueryFileRequest')
 const deelQuerySlotsQequest = require('./routers/deelQuerySlotsQequest')
 
 var router = {
@@ -14,7 +14,7 @@ var router = {
                 break
             case '/getWaybillChute' : deelQuerySlotsQequest(res,req)
                 return
-            case '/queryPicture' : deelQueryPictureRequest(res,getFileList)
+            case '/queryFile' : deelQueryFileRequest(res,getFileList)
                 return
             default : 
                 break

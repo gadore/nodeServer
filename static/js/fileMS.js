@@ -4,7 +4,7 @@ function init(){
 }
 
 function getPicList(){
-    $.get('/queryPicture', {
+    $.get('/queryFile', {
         name:'front'
     }).done(function (data) {
         var temp = JSON.parse(data)

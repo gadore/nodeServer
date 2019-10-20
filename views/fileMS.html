@@ -23,14 +23,14 @@
     </style>
 </head>
 <body id="body" class="themeDay" onload="init()">
-    <h1>Picture manager</h1>
+    <h1>File manager</h1>
     <div id="root" class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-xs-12" v-for="pic in pics">
-                        <li class="fa fa-file-image-o"></li><a v-bind:href="pic.link">{{pic.name}}</a>
+                        <li class="fa fa-file-image-o"></li><a v-bind:href="pic.link" v-bind:download="pic.link">{{pic.name}}</a>
                 </div>
             </div>
         </div>
-    <script src="../static/js/pictureMS.js"></script>
+    <script src="../static/js/fileMS.js"></script>
 </body>
 </html>

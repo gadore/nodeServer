@@ -4,7 +4,7 @@ var app = new Vue({
         tags: [
             { link: 'blog', text: 'blog' ,class:'fa fa-newspaper-o'},
             { link:'mates', text: 'mates' ,class:'fa fa-users'},
-            { link: 'views/pictureMS.html', text:'pic' ,class:'fa fa-camera-retro'},
+            { link: 'views/fileMS.html', text:'files' ,class:'fa fa-camera-retro'},
             { link:'words', text: 'words' ,class:'fa fa-first-order'},
         ]
     }
@@ -15,7 +15,7 @@ function init() {
 }
 
 function buttonClick() {
-    var jqxhr = $.get('/queryPicture', {
+    var jqxhr = $.get('/queryFile', {
         name:'front'
     }).done(function (data) {
         console.log(JSON.parse(data))
