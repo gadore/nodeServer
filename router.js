@@ -2,7 +2,8 @@ const fs = require('fs') //引入node 文件读写fs模块
 const path = require('path') //引入 node path模块
 const resMime = require('./utils/resMime.js') //引入自定义模块，模块主要处理响应头
 const deelQueryFileRequest = require('./routers/deelQueryFileRequest')
-const deelQuerySlotsQequest = require('./routers/deelQuerySlotsQequest')
+const deelQuerySlotsRequest = require('./routers/deelQuerySlotsRequest')
+const deelPacketOffRequest = require('./routers/deelPacketOffRequest')
 
 var router = {
     notFoundRes: notfound,
@@ -12,7 +13,9 @@ var router = {
                 break
             case '/favicon.ico': res.end()
                 break
-            case '/getWaybillChute' : deelQuerySlotsQequest(res,req)
+            case '/api/v1/warehouse/order/check' : deelQuerySlotsRequest(res,req)
+                return
+            case '/api/v1/warehouse/port/response' : deelPacketOffRequest(res,req)
                 return
             case '/queryFile' : deelQueryFileRequest(res,getFileList)
                 return
