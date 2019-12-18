@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,23 +15,58 @@
     <link rel="stylesheet" href="../static/css/font-awesome.css">
     <title>PictureManager</title>
     <style>
-        .row>div>li{
+        .row>div>li {
             margin-right: 5px;
         }
-        .row>div{
+
+        .row>div {
             font-size: 25px;
         }
     </style>
 </head>
+
 <body id="body" class="themeDay" onload="init()">
-    <h1>File manager</h1>
     <div id="root" class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-4 col-xs-12" v-for="pic in pics">
-                        <li class="fa fa-file-image-o"></li><a v-bind:href="pic.link" v-bind:download="pic.link">{{pic.name}}</a>
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-xs-8">
+                <h1>File manager</h1>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4">
+                <div style="line-height: 70px;text-align: right;">
+                    <li class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#myModal"></li>
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-xs-12" v-for="pic in pics">
+                <li class="fa fa-file-image-o"></li><a v-bind:href="pic.link"
+                    v-bind:download="pic.link">{{pic.name}}</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="color:black;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel" style="color:black;">FileUpload</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="mark" id="mark"><span>备注</span>
+                    <input type="file" name="fileInput" id="file">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="../static/js/fileMS.js"></script>
 </body>
+
 </html>
