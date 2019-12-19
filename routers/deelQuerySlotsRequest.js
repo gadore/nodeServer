@@ -4,12 +4,12 @@ function deelQuerySlotsQequest(res,req){
     })
     res.writeHead(200)
      var tempdata = {
-        "Code":"200",
-        "Message":"OK",
+        "code":0,
+        "message":"OK",
         "data":{
             "is_unusual":false,
             "remark":"none",
-            "target_port":[1,3]
+            "target_port_list":[1,2,3]
         }
     }
     // 将HTTP响应的HTML内容写入response:

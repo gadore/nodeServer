@@ -4,8 +4,8 @@ function deelPacketOffRequest(res,req){
     })
     res.writeHead(200)
      var tempdata = {
-        "Code":"200",
-        "Message":"OK"
+        "code":0,
+        "message":"OK"
     }
     // 将HTTP响应的HTML内容写入response:
     res.write(JSON.stringify(tempdata))

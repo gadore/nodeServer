@@ -13,9 +13,9 @@ var router = {
                 break
             case '/favicon.ico': res.end()
                 break
-            case '/api/v1/warehouse/order/check' : deelQuerySlotsRequest(res,req)
+            case '/api/v1/equipment/order/check' : deelQuerySlotsRequest(res,req)
                 return
-            case '/api/v1/warehouse/port/response' : deelPacketOffRequest(res,req)
+            case '/api/v1/equipment/port/response' : deelPacketOffRequest(res,req)
                 return
             case '/queryFile' : deelQueryFileRequest(res,getFileList)
                 return
