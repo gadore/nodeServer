@@ -4,6 +4,7 @@ const resMime = require('./utils/resMime.js') //引入自定义模块，模块�
 const deelQueryFileRequest = require('./routers/deelQueryFileRequest')
 const deelQuerySlotsRequest = require('./routers/deelQuerySlotsRequest')
 const deelPacketOffRequest = require('./routers/deelPacketOffRequest')
+const deelFileUpload = require('./routers/deelFileUpload')
 
 var router = {
     notFoundRes: notfound,
@@ -17,10 +18,16 @@ var router = {
                 return
             case '/api/v1/equipment/port/response' : deelPacketOffRequest(res,req)
                 return
-            case '/queryFile' : deelQueryFileRequest(res,getFileList)
+            case '/queryFile' : deelQueryFileRequest(res,req,getFileList)
+                return
+            case '/deelFileUpload' : deelFileUpload(res,req)
                 return
             default : 
                 break
+        }
+        if(isContains(pathName,'queryFile')){
+            deelQueryFileRequest(res,req,getFileList)
+            return
         }
         if(pathName != '/favicon.ico'){
             let extName = path.extname(pathName) //拿到扩展名（比如说：'index.html' => '.html'）
@@ -53,6 +60,10 @@ var notfound = function (res) {
 function getFileList(FolderName) {
     let fileList = fs.readdirSync(FolderName);
     return fileList
+}
+
+function isContains(str, substr) {
+    return str.indexOf(substr) >= 0;
 }
 
 module.exports = router

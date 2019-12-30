@@ -1,7 +1,7 @@
 const http = require('http') //引入node http模块
 const url = require('url') //引入  url  模块
 const router = require('./router')
-// const DbManager = require('./database/DbManager')
+const DbManager = require('./database/DbManager')
 
 const server = http.createServer((req, res) => { //http.createServer()创建服务器
 

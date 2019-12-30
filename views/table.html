@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../static/css/bootstrap.css">
     <link rel="stylesheet" href="../static/css/theme.css">
     <link rel="stylesheet" href="../static/css/font-awesome.css">
-    <title>PictureManager</title>
+    <title>TableDisplay</title>
     <style>
         .row>div>li {
             margin-right: 5px;
@@ -38,11 +38,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-4 col-xs-12" v-for="pic in pics" >
-                <li v-bind:class="pic.type"></li>
-                <span v-if="pic.bool" class="folderClick">{{pic.name}}</span>
-                <span v-else-if="pic.download" ><a v-bind:href="pic.link" v-bind:download="pic.link"> {{pic.name}}</a></span>
-                <span v-else><a v-bind:href="pic.link"> {{pic.name}}</a></span>
+            <div class="col-lg-3 col-md-4 col-xs-12" v-for="pic in pics">
+                <!-- v-bind:download="pic.link" -->
+                <!-- class="fa fa-file-image-o" -->
+                <li v-bind:class="pic.type"></li><a v-bind:href="pic.link">{{pic.name}}</a>
             </div>
         </div>
     </div>
@@ -65,9 +64,9 @@
                         <!-- Single button -->
                         <select name="area" id="place">
                             <option value="">Default</option>
-                            <option value="baoding">保定</option>
-                            <option value="wenzhou">温州</option>
-                            <option value="hangzhou">杭州</option>
+                            <option value="保定">保定</option>
+                            <option value="温州">温州</option>
+                            <option value="杭州">杭州</option>
                         </select>
                         </div>
                         <div>
@@ -86,7 +85,7 @@
             </form>
         </div>
     </div>
-    <script src="../static/js/fileMS.js"></script>
+    <!-- <script src="../static/js/fileMS.js"></script> -->
 </body>
 
 </html>

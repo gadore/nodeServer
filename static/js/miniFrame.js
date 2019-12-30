@@ -33,3 +33,8 @@ function $mkEle(ele){
 function scrollToEnd(ele){
     ele.children[ele.children.length-1].scrollIntoView(false)
 }
+
+
+function isContains(str, substr) {
+    return str.indexOf(substr) >= 0;
+}
