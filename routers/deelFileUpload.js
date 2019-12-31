@@ -6,27 +6,37 @@ function deelFileUpload(res, req) {
     if (req.url == '/deelFileUpload' && req.method.toLowerCase() == 'post') {
         // parse a file upload
         var form = new formidable.IncomingForm();
-        form.uploadDir = 'static/files/yunda'
+        form.uploadDir = 'static/files'
 
         form.parse(req, function (err, fields, files) {
-            console.log(fields)
+            if(fields == {}){
+                console.log('null field')
+            }
             for (let key in files) {
                 let file = files[key]
                 // 过滤空文件
                 if (file.size == 0 && file.name == '') continue
 
-                var area = fields.area
-                var mark = fields.mark
+                var now = new Date()
+                var area = now.getFullYear().toString() + (now.getMonth() + 1) + now.getDate().toString()
 
-                if(!fs.existsSync('static/files/yunda/' + area)){
-                    fs.mkdirSync('static/files/yunda/' + area)
+                if(!fs.existsSync('static/files/' + area)){
+                    fs.mkdirSync('static/files/' + area)
                 }
 
-                let fileType = file.name.split('.')[1],
-                    oldPath = file.path,
-                    fileName = file.name.split('.')[0]
+                var fileInfo = file.name.split('.')
+                var fileType = ''
+                var fileName = file.name
+                if(fileInfo.length > 1){
+                    fileType = fileInfo[fileInfo.length-1]
+                    fileName = fileInfo[0]
+                    for(var i = 1 ; i < fileInfo.length - 1 ; i++){
+                        fileName += '.' + fileInfo[i]
+                    }
+                }
+                var oldPath = file.path
                 fileName = encodeURI(fileName)
-                var newPath = 'static/files/yunda/' + area + '/' + mark + '_' + fileName + '.' + fileType
+                var newPath = 'static/files/' + area + '/' + fileName + '.' + fileType
                 fs.rename(oldPath, newPath, (error) => {
                     if (error){
                         console.log(error)
