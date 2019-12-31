@@ -68,6 +68,7 @@ function uploadFailed(){
 function uploadFile() {
     $id('progress').classList.remove('hidden')
     var xhr = new XMLHttpRequest();
+    
     xhr.onload = uploadComplete; // 添加 上传成功后的回调函数
     xhr.onerror =  uploadFailed; // 添加 上传失败后的回调函数
     xhr.upload.onprogress = progressFunction; // 添加 监听函数

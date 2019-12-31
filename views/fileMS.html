@@ -37,14 +37,14 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-3 col-md-4 col-xs-12" v-for="pic in pics" >
+        <div class="row" style="overflow: hidden;">
+            <div class="col-lg-3 col-md-4 col-xs-12" v-for="pic in pics" style="overflow: hidden;">
                 <li v-bind:class="pic.type"></li>
-                <span v-if="pic.bool" style="cursor: pointer;" class="folderClick">{{pic.name}}</span>
+                <span v-if="pic.bool" style="cursor: pointer;" class="folderClick" style="overflow: hidden;overflow-wrap: break-word;">{{pic.name}}</span>
                 <span v-else-if="pic.download" style="cursor: pointer;">
-                    <a v-bind:href="pic.link" v-bind:download="pic.link"> {{pic.name}}</a>
+                    <a v-bind:href="pic.link" v-bind:download="pic.link" style="overflow: hidden;overflow-wrap: break-word;"> {{pic.name}}</a>
                 </span>
-                <span v-else style="cursor: pointer;"><a v-bind:href="pic.link"> {{pic.name}}</a></span>
+                <span v-else style="cursor: pointer;"><a v-bind:href="pic.link" style="overflow: hidden;overflow-wrap: break-word;"> {{pic.name}}</a></span>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="modal-body">
                         <div>
-                            <input type="file" name="fileInput" id="file">
+                            <input type="file" name="fileInput" id="file" multiple>
                         </div>
                     </div>
                     <div class="progress hidden" id="progress">
