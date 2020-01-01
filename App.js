@@ -1,7 +1,10 @@
 const http = require('http') //引入node http模块
 const url = require('url') //引入  url  模块
 const router = require('./router')
-const DbManager = require('./database/DbManager')
+const webSocket = require('./handler/webSocket')
+// const DbManager = require('./database/DbManager')
+
+global.wss = webSocket
 
 const server = http.createServer((req, res) => { //http.createServer()创建服务器
 
@@ -15,3 +18,4 @@ const server = http.createServer((req, res) => { //http.createServer()创建服�
 })
 
 server.listen('9988')
+console.log('Server openned on port 9988')

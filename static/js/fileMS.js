@@ -5,10 +5,6 @@ function init() {
     getPicList()
 }
 
-function openfolder(folder){
-    console.log(folder)
-}
-
 function getPicList() {
     $.get('/queryFile', {
         name: 'front'
@@ -30,11 +26,8 @@ function initDom(list) {
 
 function mkPicList(list,subPath) {
     var resList = []
-
     subPath = subPath == undefined ? '' : subPath + '/'
-
     resList.push(mkObject('fa fa-folder','/queryFile?' + 'place='+'home',true,'home'))
-
     for (var i = 0; i < list.length; i++) {
         var flag = list[i].split('.')
         var flagLength = flag.length
@@ -44,7 +37,6 @@ function mkPicList(list,subPath) {
                 download = true
             }
             tempPath = '../static/files/' + subPath + list[i]
-
             resList.push(mkObject(setFileIcon(flag[flagLength - 1]),tempPath,false,decodeURI(list[i]),download))
         } else {
             resList.push(mkObject('fa fa-folder','/queryFile?' + 'place='+list[i],true,list[i],false))
@@ -74,18 +66,6 @@ function uploadFile() {
     xhr.upload.onprogress = progressFunction; // 添加 监听函数
     xhr.open("POST", '/deelFileUpload', true);
     xhr.send(new FormData($('#form')[0]));
-    // $.ajax({
-    //     url: '/deelFileUpload',
-    //     type: 'post',
-    //     data: new FormData($('#form')[0]), 
-    //     cache: false, //上传文件不需要缓存
-    //     processData: false, // 告诉jQuery不要去处理发送的数据
-    //     contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-    //     success: function (data) {
-    //         console.log(data);
-    //         // 设置图片预览功能
-    //     }
-    // })
 }
 
 function initBinding(){
