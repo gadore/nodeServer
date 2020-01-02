@@ -1,6 +1,7 @@
 const fs = require('fs') //引入node 文件读写fs模块
 const path = require('path') //引入 node path模块
 const formidable = require('formidable')
+const Logger = require('../handler/logger')
 
 function deelFileUpload(res, req) {
     if (req.url == '/deelFileUpload' && req.method.toLowerCase() == 'post') {
@@ -26,8 +27,8 @@ function deelFileUpload(res, req) {
             var newPath = 'static/files/' + area + '/' + fileName + '.' + fileType
             fs.rename(file.path, newPath, (error) => {
                 if (error)
-                    console.log(error)
-                console.info('done')
+                    Logger.getInstance().logError('deelFileUpload',error)
+                Logger.getInstance().logInfo('deelFileUpload','received from upload file -> done')
             })
         });
         res.writeHead(200)

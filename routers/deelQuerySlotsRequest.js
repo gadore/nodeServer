@@ -1,6 +1,6 @@
 function deelQuerySlotsQequest(res,req){
     req.on('data',function(data){
-        console.log(data.toString())
+        Logger.getInstance().logInfo('deelQuerySlotsRqquest',data.toString())
     })
     res.writeHead(200)
      var tempdata = {

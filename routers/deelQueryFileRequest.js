@@ -20,7 +20,7 @@ function deelQueryPictureRequest(res, req, getFileList) {
         res.writeHead(200)
     }catch(e){
         res.writeHead(500)
-        console.log(e)
+        Logger.getInstance().logError('deelQueryFileRequest',e)
     }
 
     // 将HTTP响应的HTML内容写入response:
