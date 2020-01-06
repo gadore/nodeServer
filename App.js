@@ -3,9 +3,10 @@ const url = require('url') //引入  url  模块
 const Logger = require('./handler/logger')
 const router = require('./router')
 const webSocket = require('./handler/webSocket')
-const DbManager = require('./database/DbManager')
+// const DbManager = require('./database/DbManager')
 
 global.wss = webSocket
+webSocket.init('test')
 
 const server = http.createServer((req, res) => { //http.createServer()创建服务器
 

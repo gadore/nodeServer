@@ -1,14 +1,14 @@
 'use strict'
 
-function TooTLogger() {
+function Logger() {
     this.log4js = {};
     this.logger = {};
     this.level = '';
 }
 
-TooTLogger.prototype.name = 'moiiom-logger';
+Logger.prototype.name = 'moiiom-logger';
 
-TooTLogger.prototype.init = function () {
+Logger.prototype.init = function () {
     try {
         this.log4js = require('log4js');
 
@@ -19,48 +19,48 @@ TooTLogger.prototype.init = function () {
 
         this.logger = this.log4js.getLogger('TooT');
 
-        TooTLogger.getInstance().logInfo('TooTLoger.init','init success')
+        Logger.getInstance().logInfo('TooTLoger.init','init success')
     } catch (error) {
-        console.log(`[TooTLogger.init] error : ${error}`);
+        console.log(`[Logger.init] error : ${error}`);
     }
 }
 
-TooTLogger.prototype.logDebug = function (methodName,content) {
+Logger.prototype.logDebug = function (methodName,content) {
     const logInfo = `[${methodName}]--${content}`;
     this.logger.level = 'debug';
     this.logger.debug(logInfo);
 };
 
-TooTLogger.prototype.logInfo = function (methodName,content) {
+Logger.prototype.logInfo = function (methodName,content) {
     const logInfo = `[${methodName}]--${content}`;
     this.logger.level = 'info';
     this.logger.info(logInfo);
 };
 
-TooTLogger.prototype.logWarn = function (methodName,content) {
+Logger.prototype.logWarn = function (methodName,content) {
     const logInfo = `[${methodName}]--${content}`;
     this.logger.level = 'warn';
     this.logger.warn(logInfo);
 };
 
-TooTLogger.prototype.logError = function (methodName,content) {
+Logger.prototype.logError = function (methodName,content) {
     const logInfo = `[${methodName}]--${content}`;
     this.logger.level = 'error';
     this.logger.error(logInfo);
 };
 
-TooTLogger.prototype.logFatal = function (methodName,content) {
+Logger.prototype.logFatal = function (methodName,content) {
     const logInfo = `[${methodName}]--${content}`;
     this.logger.level = 'fatal';
     this.logger.fatal(logInfo);
 };
 
-TooTLogger.getInstance = function () {
-    if (!TooTLogger.instance) {
-        TooTLogger.instance = new TooTLogger();
-        TooTLogger.instance.init()
+Logger.getInstance = function () {
+    if (!Logger.instance) {
+        Logger.instance = new Logger();
+        Logger.instance.init()
     }
-    return TooTLogger.instance;
+    return Logger.instance;
 };
 
-module.exports = TooTLogger;
+module.exports = Logger;
