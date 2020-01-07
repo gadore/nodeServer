@@ -35,13 +35,13 @@ function test(){
     setInterval(function(){
         Clients.forEach(client => {
             client.send(
-                `{"serviceName":"MonitorMain","data": "${randomStatus(200)}" }`
+                `{"serviceName":"MonitorMain","data": "${randomStatus(242)}" }`
                 ,(err) => {
                     if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
                 }
             )
         })
-    },1*5*1000)
+    },1*3*1000)
 }
 
 function init(args){
