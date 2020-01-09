@@ -21,10 +21,10 @@ const wss = new WebSocketServer({
     port: 9989
 })
 
-function randomStatus(num){
+function randomStatus(total,scope){
     var res = ''
-    for(var i=0;i<num;i++){
-        var tempNum = Math.random()*8
+    for(var i=0;i<total;i++){
+        var tempNum = Math.random()*scope
         tempNum = Math.round(tempNum)
         res = res.length == 0 ? res + tempNum : res + ',' + tempNum
     }
@@ -35,7 +35,13 @@ function test(){
     setInterval(function(){
         Clients.forEach(client => {
             client.send(
-                `{"serviceName":"MonitorMain","data": "${randomStatus(242)}" }`
+                `{"serviceName":"MonitorMain","data": "${randomStatus(242,8)}" }`
+                ,(err) => {
+                    if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
+                }
+            )
+            client.send(
+                `{"serviceName":"MonitorChute","data": "${randomStatus(200,4)}" }`
                 ,(err) => {
                     if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
                 }
