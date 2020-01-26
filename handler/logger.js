@@ -13,11 +13,11 @@ Logger.prototype.init = function () {
         this.log4js = require('log4js');
 
         this.log4js.configure({
-            appenders: { TooT: { type: 'dateFile', filename: './logs/debug.log' } },
-            categories: { default: { appenders: ['TooT'], level: 'error' } }
+            appenders: { ToT: { type: 'dateFile', filename: './logs/debug.log' } },
+            categories: { default: { appenders: ['ToT'], level: 'error' } }
         });
 
-        this.logger = this.log4js.getLogger('TooT');
+        this.logger = this.log4js.getLogger('ToT');
 
         Logger.getInstance().logInfo('TooTLoger.init','init success')
     } catch (error) {
