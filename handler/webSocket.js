@@ -35,13 +35,43 @@ function test(){
     setInterval(function(){
         Clients.forEach(client => {
             client.send(
-                `{"serviceName":"MonitorMain","data": "${randomStatus(242,8)}" }`
+                `{"serviceName":"Car","data": "${randomStatus(242,8)}" }`
                 ,(err) => {
                     if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
                 }
             )
             client.send(
-                `{"serviceName":"MonitorChute","data": "${randomStatus(200,4)}" }`
+                `{"serviceName":"Chute","data": "${randomStatus(200,4)}" }`
+                ,(err) => {
+                    if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
+                }
+            )
+            client.send(
+                `{"serviceName":"Plat","data": "${randomStatus(12,3)}" }`
+                ,(err) => {
+                    if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
+                }
+            )
+            client.send(
+                `{"serviceName":"Motor","data": "${randomStatus(8,3)}" }`
+                ,(err) => {
+                    if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
+                }
+            )
+            client.send(
+                `{"serviceName":"ElectricBox","data": "${randomStatus(3,3)}" }`
+                ,(err) => {
+                    if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
+                }
+            )
+            client.send(
+                `{"serviceName":"GrayScanner","data": "${randomStatus(8,3)}" }`
+                ,(err) => {
+                    if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
+                }
+            )
+            client.send(
+                `{"serviceName":"OBRScanner","data": "${randomStatus(2,3)}" }`
                 ,(err) => {
                     if(err)Logger.getInstance().logError('websocket',`[webSocket.sendMessageToClient] error: ${err}`)
                 }
