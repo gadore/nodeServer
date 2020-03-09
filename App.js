@@ -3,7 +3,7 @@ const url = require('url') //引入  url  模块
 const Logger = require('./handler/logger')
 const router = require('./router')
 const webSocket = require('./handler/webSocket')
-// const DbManager = require('./database/DbManager')
+const DbManager = require('./database/DbManager')
 
 global.wss = webSocket
 webSocket.init('test')
@@ -14,10 +14,12 @@ const server = http.createServer((req, res) => { //http.createServer()创建服�
     try{
         router.handler(pathName,req,res)
     }catch(err){
-        console.log(err)
-        router.notFoundRes(res)
+        Logger.getInstance().logError('App.js','Server handle router :' + pathName + ' error' + err)
+        res.writeHead(404)
+        res.write('404')
+        res.end()
     }
 })
 
-server.listen('9988')
-Logger.getInstance().logInfo('App.js','Server openned on port 9988')
+server.listen('60880')
+Logger.getInstance().logInfo('App.js','Server openned on port 60880')
