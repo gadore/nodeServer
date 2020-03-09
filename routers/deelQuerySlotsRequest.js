@@ -1,3 +1,5 @@
+const Logger = require('../handler/logger')
+
 function deelQuerySlotsQequest(res,req){
     req.on('data',function(data){
         Logger.getInstance().logInfo('deelQuerySlotsRqquest',data.toString())

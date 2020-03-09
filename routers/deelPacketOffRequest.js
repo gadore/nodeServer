@@ -1,6 +1,8 @@
+const Logger = require('../handler/logger')
+
 function deelPacketOffRequest(res,req){
     req.on('data',function(data){
-        console.log(data.toString())
+        Logger.getInstance().LogInfo('deelPacketOffRequest',data.toString())
     })
     res.writeHead(200)
      var tempdata = {

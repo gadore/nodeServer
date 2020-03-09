@@ -9,7 +9,7 @@ var router = {
             case '/api/v1/equipment/port/response' : deelPacketOffRequest(res,req)
                 return
             default:
-                notfound()
+                notfound(res)
                 return
         }
     }

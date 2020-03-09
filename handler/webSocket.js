@@ -148,26 +148,26 @@ function init(args) {
         ws.to = 'server'
         ws.login = false
         Clients.set(ws.uuid, ws)
-        Logger.getInstance().logInfo('websocket', `[SERVER] connection() clientId:${ws.uuid}`);
+        Logger.getInstance().logInfo('websocket', `connection() clientId:${ws.uuid}`);
         ws.send(`CONNECT: clientId: + ${ws.uuid}`, (err) => {
             if (err) {
-                Logger.getInstance().logError('websocket', `[SERVER] error: ${err}`)
+                Logger.getInstance().logError('websocket', `error: ${err}`)
             }
         })
         ws.on('message', function (message) {
             Clients.set(ws.uuid, ws)
             handleJsonMessage(message, ws.uuid)
-            Logger.getInstance().logInfo('websocket', `[SERVER] Received: ${message}`)
+            Logger.getInstance().logInfo('websocket', `Received: ${message}`)
             ws.send(`ECHO: ${message}`, (err) => {
                 if (err) {
-                    Logger.getInstance().logError('websocket', `[SERVER] error: ${err}`)
+                    Logger.getInstance().logError('websocket', `error: ${err}`)
                 }
             })
         })
         ws.onclose = function (ws) {
             if (ws.target.uuid != undefined) {
                 Clients.delete(ws.target.uuid)
-                Logger.getInstance().logInfo('websocket', `[SERVER] client disconnected ,client id : ${ws.target.uuid}`)
+                Logger.getInstance().logInfo('websocket', `client disconnected ,client id : ${ws.target.uuid}`)
             }
         }
     })
