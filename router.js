@@ -1,5 +1,6 @@
 const deelQuerySlotsRequest = require('./routers/deelQuerySlotsRequest')
 const deelPacketOffRequest = require('./routers/deelPacketOffRequest')
+const api = require('./routers/api')
 
 var router = {
     handler: function (pathName, req, res) {
@@ -7,6 +8,8 @@ var router = {
             case '/api/v1/equipment/order/check' : deelQuerySlotsRequest(res,req)
                 return
             case '/api/v1/equipment/port/response' : deelPacketOffRequest(res,req)
+                return
+            case '/api' : api(res,req)
                 return
             default:
                 notfound(res)

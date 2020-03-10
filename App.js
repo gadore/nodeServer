@@ -21,5 +21,5 @@ const server = http.createServer((req, res) => { //http.createServer()创建服�
     }
 })
 
-server.listen('60880')
-Logger.getInstance().logInfo('App.js','Server openned on port 60880')
+server.listen('5678')
+Logger.getInstance().logInfo('App.js','Server openned on port 5678')
