@@ -102,7 +102,7 @@ function test() {
                     }
                 )
                 client.send(
-                    `{"ServiceName":"GrayScanner","Data": "${randomStatus(8,3)}" }`, (err) => {
+                    `{"ServiceName":"GrayScanner","Data": "${randomStatus(40,3)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )

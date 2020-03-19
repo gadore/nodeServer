@@ -1,6 +1,8 @@
 const deelQuerySlotsRequest = require('./routers/deelQuerySlotsRequest')
 const deelPacketOffRequest = require('./routers/deelPacketOffRequest')
+const fetchMusic = require('./routers/fetchMusicList')
 const api = require('./routers/api')
+const fetchCover = require('./routers/fetchMusicCover')
 
 var router = {
     handler: function (pathName, req, res) {
@@ -10,6 +12,10 @@ var router = {
             case '/api/v1/equipment/port/response' : deelPacketOffRequest(res,req)
                 return
             case '/api' : api(res,req)
+                return
+            case '/music' : fetchMusic(res,req)
+                return
+            case '/cover' : fetchCover(res,req)
                 return
             default:
                 notfound(res)

@@ -18,11 +18,13 @@
   },
   "homepage": "https://github.com/gadore/gadore.github.io#readme",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "formidable": "^1.2.1",
     "log4js": "^6.1.0",
     "mysql": "^2.17.1",
+    "request": "^2.88.2",
     "uuid": "^3.3.3",
-    "ws": "^7.2.1"
+    "ws": "^7.2.3"
   }
 }
