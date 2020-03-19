@@ -22,5 +22,5 @@ const server = http.createServer((req, res) => { //http.createServer()创建服�
     }
 })
 
-server.listen('5678')
+server.listen('2333')
 Logger.getInstance().logInfo('App.js','Server openned on port 5678')
