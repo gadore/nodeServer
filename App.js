@@ -13,6 +13,7 @@ const server = http.createServer((req, res) => { //http.createServer()创建服�
     let pathName = url.parse(req.url).pathname //获取req.url,并且转换请求的路径
     try{
         res.setHeader('Access-Control-Allow-Origin','*');
+        res.setHeader('content-type', 'application/json;charset=utf-8');
         router.handler(pathName,req,res)
     }catch(err){
         Logger.getInstance().logError('App.js','Server handle router :' + pathName + ' error' + err)
@@ -22,5 +23,5 @@ const server = http.createServer((req, res) => { //http.createServer()创建服�
     }
 })
 
-server.listen('5678')
+server.listen('2333')
 Logger.getInstance().logInfo('App.js','Server openned on port 5678')
