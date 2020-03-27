@@ -4,10 +4,10 @@ const fs = require('fs')
 var cheerio = require('cheerio')
 
 function fetMusicCover(res,req) {
-    req.on('data',function(data){
-        Logger.getInstance().logInfo('fetchCover',data.toString())
-        var url = JSON.parse(data).url
-        request(url, function (error, response, body) {
+    var musicId = req.url.split('=')[1];
+    var musicUrl = 'https://music.163.com/song?id=' + musicId;
+    Logger.getInstance().logInfo('fetchCover',musicId)
+        request(musicUrl, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 var $ = cheerio.load(body)
                 // <meta property="og:image" content="http://p2.music.126.net/LGSZ3rGT8Ux1pYxcwxnR-g==/2225411534621328.jpg" />
@@ -30,7 +30,6 @@ function fetMusicCover(res,req) {
                 res.end()
             }
         })
-    })
 }
 
 module.exports = fetMusicCover
