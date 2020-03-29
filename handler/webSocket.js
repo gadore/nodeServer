@@ -32,6 +32,11 @@ function randomStatus(total, scope,constNum) {
     return res
 }
 
+function currentTime(){
+    var now = Date.now()
+    return now
+}
+
 function handleJsonMessage(msg, clientId) {
     var jsonMessage = JSON.parse(msg)
     var serviceName = jsonMessage.ServiceName
@@ -112,7 +117,12 @@ function test() {
                     }
                 )
                 client.send(
-                    `{"ServiceName":"DropSlot","Slot": "${randomStatus(1,200)}" }`, (err) => {
+                    `{"ServiceName":"SortorDropSlot","Slot": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"ConveryDropSlot","Slot": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
@@ -139,7 +149,7 @@ function test() {
                 )
             }
         })
-    }, 1 * 2 * 1000)
+    }, 1 * 1 * 1000)
 }
 
 function init(args) {
