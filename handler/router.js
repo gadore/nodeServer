@@ -1,8 +1,8 @@
-const deelQuerySlotsRequest = require('./routers/deelQuerySlotsRequest')
-const deelPacketOffRequest = require('./routers/deelPacketOffRequest')
-const fetchMusic = require('./routers/fetchMusicList')
-const api = require('./routers/api')
-const fetchCover = require('./routers/fetchMusicCover')
+const deelQuerySlotsRequest = require('../routers/deelQuerySlotsRequest')
+const deelPacketOffRequest = require('../routers/deelPacketOffRequest')
+const fetchMusic = require('../routers/fetchMusicList')
+const api = require('../routers/api')
+const fetchCover = require('../routers/fetchMusicCover')
 
 var router = {
     handler: function (pathName, req, res) {

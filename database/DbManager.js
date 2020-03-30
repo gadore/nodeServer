@@ -16,7 +16,7 @@ try {
         }else{
             Logger.getInstance().logInfo('DbManager', 'Database connection is success')
         }
-        // Logger.getInstance().logInfo('DbManager','The solution is: ', results[0].solution)
+        Logger.getInstance().logInfo('DbManager','The solution is: ', results[0].solution)
     })
 } catch (e) {
     Logger.getInstance().logError('DbManager', e)
