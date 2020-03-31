@@ -38,6 +38,13 @@ function fetMusicList(res, req) {
                 }
             })
         } catch (e) {
+            res.writeHead(200)
+                    var result = {
+                        message: 'fetch error:' +e,
+                        data: []
+                    }
+                    res.write(JSON.stringify(result))
+                    res.end()
             Logger.getInstance().logError('fetchMusicList', e)
         }
     })

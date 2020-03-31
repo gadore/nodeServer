@@ -4,6 +4,7 @@ const fs = require('fs')
 var cheerio = require('cheerio')
 
 function fetMusicCover(res,req) {
+    try{
     var musicId = req.url.split('=')[1];
     var musicUrl = 'https://music.163.com/song?id=' + musicId;
     Logger.getInstance().logInfo('fetchCover',musicId)
@@ -30,6 +31,16 @@ function fetMusicCover(res,req) {
                 res.end()
             }
         })
+    }catch(e){
+        res.writeHead(200)
+                    var result = {
+                        message: 'fetch error:' +e,
+                        data: []
+                    }
+                    res.write(JSON.stringify(result))
+                    res.end()
+        Logger.getInstance().logError('fetMusicCover',e)
+    }
 }
 
 module.exports = fetMusicCover

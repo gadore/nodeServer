@@ -69,9 +69,8 @@ function createSocketServer(Port) {
                 if (headerSize != 0 && hexType) {
                     msg = getMsgWithHeaderSize(msg, headerSize)
                 }
-                // sendMsgToClients(msg)
                 sendMsgToWebSocket(msg)
-                Logger.getInstance().logInfo('tcpSocket', '[Server receive]:' + `${client.remoteAddress}:${client.remotePort}:${msg}`)
+                Logger.getInstance().logInfo('tcpSocket', '[Server receive]:' + `${client.remoteAddress}:${client.remotePort}:${bufferToString(msg)}`)
             })
 
             client.on('error', function (e) { //监听客户端异常
@@ -146,6 +145,16 @@ function sendMsgToClients(port, msg) {
             logger.getInstance().logInfo('sendMsgToClients', msg)
         })
     }
+}
+
+function bufferToString(b){
+    var ret = ''
+    for(var i=0;i<b.length;i++){
+        var num = new Uint32Array(b)[i]
+        ret += num < 10 ? '0' + num : num
+        ret += ' '
+    }
+    return ret
 }
 
 function sendMsgToWebSocket(msg){
