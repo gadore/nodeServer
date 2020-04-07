@@ -6,7 +6,6 @@ let tcpClient = []
 let hexType = true
 let headerSize = 2
 let clientBank = new Array()
-let webSocketServer
 
 
 function createSocketClient(hostname, port, id) {
@@ -147,9 +146,9 @@ function sendMsgToClients(port, msg) {
     }
 }
 
-function bufferToString(b){
+function bufferToString(b) {
     var ret = ''
-    for(var i=0;i<b.length;i++){
+    for (var i = 0; i < b.length; i++) {
         var num = new Uint32Array(b)[i]
         ret += num < 10 ? '0' + num : num
         ret += ' '
@@ -157,15 +156,18 @@ function bufferToString(b){
     return ret
 }
 
-function sendMsgToWebSocket(msg){
-    var slot = msg[2]
-    global.wss.clients.forEach(client => {
-        client.send(
-            `{"ServiceName":"ConveryDropSlot","Slot": "${slot}","TimeStamp":${currentTime()} }`, (err) => {
-                if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-            }
-        )
-    });
+function sendMsgToWebSocket(msg) {
+    var command = msg[2]
+    if (parseInt(command) == 4) {
+        var slot = msg[3]
+        global.wss.clients.forEach(client => {
+            client.send(
+                `{"ServiceName":"ConveryDropSlot","SlotID": "${slot}","TimeStamp":${currentTime()} }`, (err) => {
+                    if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                }
+            )
+        });
+    }
 }
 
 function getMsgWithHeaderSize(msg, size) {
@@ -188,13 +190,12 @@ function $isNull(sth) {
     }
 }
 module.exports = {
-    init:function(args){
-        this.webSocketServer = args
-        createSocketServer(5000)
-    } 
+    init: function (args) {
+        createSocketServer(args)
+    }
 }
 
-function currentTime(){
+function currentTime() {
     var now = Date.now()
     return now
 }

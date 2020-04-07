@@ -81,75 +81,90 @@ function test() {
     setInterval(function () {
         Clients.forEach(client => {
             if (client.login) {
-                // client.send(
-                //     `{"ServiceName":"Car","Data": "${randomStatus(242,8)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError('websocket'+`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"Chute","Data": "${randomStatus(200,4)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"Plat","Data": "${randomStatus(12,5)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"Motor","Data": "${randomStatus(14,5)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"Emergency","Data": "${randomStatus(9,3)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"GrayScanner","Data": "${randomStatus(40,3)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"OBRScanner","Data": "${randomStatus(2,3)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"SortorDropSlot","Slot": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"ConveryDropSlot","Slot": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"SlotLock","Slot": "${randomStatus(1,200)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"ServerStatus","StatusData":[{"ServerName":"MainServer","CPU":"${randomStatus(1,100)}",
-                //     "Memory":"${randomStatus(1,100)}","HDD":"${randomStatus(1,100)}" } ] }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"ServiceName":"ApplyStatus","MainServer":"online","PrintServer": "online","MonitorServer": "online" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
-                // client.send(
-                //     `{"Machine":"1","Layer":"1","ServiceName":"PlcStatus","Status": "1","Model": "1","Speed": "1.5"  }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
+                client.send(
+                    `{"ServiceName":"Car","Data": "${randomStatus(242,8)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError('websocket'+`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Chute","Data": "${randomStatus(200,4)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Plat","Data": "${randomStatus(12,5)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Motor","Data": "${randomStatus(14,5)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Emergency","Data": "${randomStatus(9,3)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"WheelEmergency","Data": "${randomStatus(9,3)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"GrayScanner","Data": "${randomStatus(40,3)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"OBRScanner","Data": "${randomStatus(2,3)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"WheelOBRScanner","Data": "${randomStatus(2,3)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"SortorDropSlot","Slot": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"ConveryDropSlot","SlotID": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"SlotLock","Slot": "${randomStatus(1,200)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Notify","Message": "notify message" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"ServerStatus","StatusData":[{"ServerName":"MainServer","CPU":"${randomStatus(1,100)}",
+                    "Memory":"${randomStatus(1,100)}","HDD":"${randomStatus(1,100)}" } ] }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"ApplyStatus","MainServer":"online","PrintServer": "online","MonitorServer": "online" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"Machine":"1","Layer":"1","ServiceName":"PlcStatus","Status": "1","Model": "1","Speed": "1.5"  }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
             }
         })
-    }, 1 * 1 * 500)
+    }, 1 * 2 * 1000)
 }
 
 function init(args) {

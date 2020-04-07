@@ -5,5 +5,5 @@ const DbManager = require('./database/DbManager')
 global.wss = webSocket
 global.tcp = tcpSocket
 
-tcpSocket.init(webSocket)
+tcpSocket.init(2000)
 webSocket.init('test')
