@@ -12,6 +12,7 @@ var router = {
             case '/api/v1/equipment/port/response' : deelPacketOffRequest(res,req)
                 return
             case '/Api/authority/User/getLogin':
+            case '/Api/authority/Role/getThreeMenuList':
             case '/api' : api(res,req)
                 return
             case '/music' : fetchMusic(res,req)

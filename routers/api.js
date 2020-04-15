@@ -2,7 +2,7 @@ const Logger = require('../handler/logger')
 
 function api(res, req) {
 
-    Logger.getInstance().logInfo('api', data.toString())
+    Logger.getInstance().logInfo('api','api')
         res.writeHead(200)
         var tempdata = {
             status: "1",
