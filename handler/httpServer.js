@@ -8,7 +8,7 @@ const server = http.createServer((req, res) => {
     try {
 
         if (req.method === 'OPTIONS') {
-            console.log('!OPTIONS');
+            // console.log('!OPTIONS');
             var headers = {};
             // IE8 does not allow domains to be specified, just the *
             // headers["Access-Control-Allow-Origin"] = req.headers.origin;
@@ -20,7 +20,7 @@ const server = http.createServer((req, res) => {
             res.writeHead(200, headers);
             res.end();
         } else {
-            console.log('else')
+            // console.log('else')
             res.setHeader('Access-Control-Allow-Origin', '*');
             // res.setHeader('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
             res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Engaged-Auth-Token");
