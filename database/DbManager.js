@@ -1,10 +1,11 @@
 const mysql = require('mysql')
 const Logger = require('../handler/logger')
 
-var connection = mysql.createConnection({
+var pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '123456',
+    connectionLimit: 100,
     database: 'simba-item-data'
 })
 
@@ -12,74 +13,60 @@ let sumNum = 0
 
 function updateSendBankPrice(id, newPrice,i) {
     var finalSql = 'update tt_send set `领用单价-不含税` =' + newPrice + ' where id = ' + id
-    connection.query(finalSql, (error,result,)=>{
-        if(error){
-            Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-        }else{
-            Logger.getInstance().logInfo('updateReceiveBankPrice', '更新id：' + id + '价格为：' + newPrice)
-        }
+    pool.getConnection(function(err,connection){
+        connection.query(finalSql, (error,result,)=>{
+            if(error){
+                Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
+            }else{
+                Logger.getInstance().logInfo('updateReceiveBankPrice', '更新id：' + id + '价格为：' + newPrice)
+            }
+        })
+        connection.release()
     })
 }
 
-function updateReceiveBankTime(id, newDate,i) {
-    var finalSql = 'update tt_receive set `入库时间` = \'' + newDate + '\' where id = ' + id
-    connection.query(finalSql, (error,result,)=>{
-        if(error){
-            Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-        }else{
-            Logger.getInstance().logInfo('updateReceiveBankPrice', '更新id：' + id + '时间为：' + newDate)
-        }
-    })
-}
+function updateReceiveBank(id,newDate,newPrice,newNum,i){
+    var finalSql = 'update tt_receive set `入库时间` = \'' + newDate + '\' , `原始数量` =' + newNum + ' , `不含税单价` =' + newPrice + ' where id = ' + id
+    pool.getConnection(function(err,connection){
+        connection.query(finalSql, (error,result,)=>{
+            if(error){
+                Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
+            }else{
+                Logger.getInstance().logInfo('updateReceiveBank', '更新id：' + id + '时间为：' + newDate + ' 数量为：' + newNum + ' 价格为：' + newPrice)
+            }
 
-function updateReceiveBankData(id, newData,i) {
-    var finalSql = 'update tt_receive set `原始数量` =' + newData + ' where id = ' + id
-    connection.query(finalSql, (error,result,)=>{
-        if(error){
-            Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-        }else{
-            Logger.getInstance().logInfo('updateReceiveBankPrice', '更新id：' + id + '数量为：' + newData)
-        }
-        if(i == sumNum){
-            console.log('Done!!!!!')
-        }else{
-            console.log('===>>>进行到ID：' + i + '(' +(parseFloat(i/sumNum)*100).toString().substring(0,5)+'%)')
-        }
-    })
-}
-
-function updateReceiveBankPrice(id, newPrice) {
-    var finalSql = 'update tt_receive set `不含税单价` =' + newPrice + ' where id = ' + id
-    connection.query(finalSql, (error,result,)=>{
-        if(error){
-            Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-        }else{
-            // console.log('更新id：' + id + '单价为：' + newPrice)
-            Logger.getInstance().logInfo('updateReceiveBankPrice', '更新id：' + id + '单价为：' + newPrice)
-        }
+            if(i == sumNum){
+                console.log('Done!!!!!')
+            }else{
+                console.log('===>>>进行到ID：' + i + '(' +(parseFloat(i/sumNum)*100).toString().substring(0,5)+'%)')
+            }
+        })
+        connection.release()
     })
 }
 
 let receiveBank
 let sendBank
 try {
-    connection.connect()
-    connection.query('SELECT * from tt_send', function (error, results, fields) {
-        if (error) {
-            Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-        } else {
-            sendBank = results
-            Logger.getInstance().logInfo('DbManager', 'sendBank init success')
-            connection.query('SELECT * from tt_receive', function (error, results, fields) {
-                if (error) {
-                    Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-                } else {
-                    receiveBank = results
-                    Logger.getInstance().logInfo('DbManager', 'receiveBank init success')
-                    start()
-                }
-            })
-        }
+    pool.getConnection(function(err,connection){
+        connection.query('SELECT * from tt_send', function (error, results, fields) {
+            if (error) {
+                Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
+            } else {
+                sendBank = results
+                Logger.getInstance().logInfo('DbManager', 'sendBank init success')
+                connection.query('SELECT * from tt_receive', function (error, results, fields) {
+                    if (error) {
+                        Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
+                    } else {
+                        receiveBank = results
+                        Logger.getInstance().logInfo('DbManager', 'receiveBank init success')
+                        start()
+                    }
+                })
+            }
+        })
+        connection.release()
     })
 
 } catch (e) {
@@ -126,12 +113,10 @@ function start() {
                 item['原始数量'] = leftNum
                 item.used = true
                 //如果记录时间比领用时间晚，就调整到领用五天前
-                console.log(getTimeString(item['入库时间']))
                 if(needTime < item['入库时间']){
                     needTime.setDate(needTime.getDate() - 5)
                     item['入库时间'] = needTime
                 }
-                console.log(getTimeString(item['入库时间']))
                 if (stillNeedCount <= 0) {
                     break
                 }
@@ -151,9 +136,7 @@ function start() {
             for(var c=0;c<sortItems.length;c++){
                 var item = sortItems[c]
                 if(item.used != undefined && item.used == true){
-                    updateReceiveBankPrice(item['id'], retPrive,i)
-                    updateReceiveBankData(item['id'], parseInt(item['原始数量']),i)
-                    updateReceiveBankTime(item['id'], getTimeString(item['入库时间']))
+                    updateReceiveBank(item['id'],getTimeString(item['入库时间']),retPrive,parseInt(item['原始数量']),i)
                     updateSendBankPrice(sendBank[i]['id'], retPrive)
                 }
             }
