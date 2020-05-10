@@ -4,7 +4,7 @@ const Logger = require('../handler/logger')
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: 'chobits',
     database: 'simba-item-data'
 })
 
@@ -62,28 +62,31 @@ function updateReceiveBankPrice(id, newPrice) {
 
 let receiveBank
 let sendBank
-try {
-    connection.connect()
-    connection.query('SELECT * from tt_send', function (error, results, fields) {
-        if (error) {
-            Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-        } else {
-            sendBank = results
-            Logger.getInstance().logInfo('DbManager', 'sendBank init success')
-            connection.query('SELECT * from tt_receive', function (error, results, fields) {
-                if (error) {
-                    Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
-                } else {
-                    receiveBank = results
-                    Logger.getInstance().logInfo('DbManager', 'receiveBank init success')
-                    start()
-                }
-            })
-        }
-    })
 
-} catch (e) {
-    Logger.getInstance().logError('DbManager', e)
+function calcBankPrice(){
+    try {
+        connection.connect()
+        connection.query('SELECT * from tt_send', function (error, results, fields) {
+            if (error) {
+                Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
+            } else {
+                sendBank = results
+                Logger.getInstance().logInfo('DbManager', 'sendBank init success')
+                connection.query('SELECT * from tt_receive', function (error, results, fields) {
+                    if (error) {
+                        Logger.getInstance().logError('DbManager', 'mysqlManager error: ' + error)
+                    } else {
+                        receiveBank = results
+                        Logger.getInstance().logInfo('DbManager', 'receiveBank init success')
+                        start()
+                    }
+                })
+            }
+        })
+    
+    } catch (e) {
+        Logger.getInstance().logError('DbManager', e)
+    }
 }
 
 function itemCompare(a, b) {
@@ -126,12 +129,10 @@ function start() {
                 item['原始数量'] = leftNum
                 item.used = true
                 //如果记录时间比领用时间晚，就调整到领用五天前
-                console.log(getTimeString(item['入库时间']))
                 if(needTime < item['入库时间']){
                     needTime.setDate(needTime.getDate() - 5)
                     item['入库时间'] = needTime
                 }
-                console.log(getTimeString(item['入库时间']))
                 if (stillNeedCount <= 0) {
                     break
                 }

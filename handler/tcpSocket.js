@@ -140,8 +140,8 @@ function recycleSocketServer(port) {
 
 function sendMsgToClients(port, msg) {
     for (client in clientBank[port]) {
-        client.write(msg, function () {
-            logger.getInstance().logInfo('sendMsgToClients', msg)
+        clientBank[port][client].write(msg, function () {
+            // logger.getInstance().logInfo('sendMsgToClients', msg)
         })
     }
 }
@@ -192,6 +192,9 @@ function $isNull(sth) {
 module.exports = {
     init: function (args) {
         createSocketServer(args)
+    },
+    sendMsgToClient: function(port,msg){
+        sendMsgToClients(port,msg)
     }
 }
 
