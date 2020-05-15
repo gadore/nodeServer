@@ -5,7 +5,8 @@ let tcpServer = []
 let tcpClient = []
 let hexType = true
 let headerSize = 2
-defaultColor =[0,0,255]
+let defaultColor =[0,0,255]
+let brightness = 30
 let clientBank = new Array()
 
 let autoSendFlag = true
@@ -20,18 +21,24 @@ setInterval(function(){
 function handleTcpMessage(msg){
     var type = msg['type']
     switch(type){
-        case 'setTime':
+        case 'autoTime':
             autoSendFlag = !autoSendFlag
             break
         case 'setColor':
             defaultColor = msg['color']
             break
-        default: 
+        case 'setBrightness':
+            brightness = msg.brightness
+            sendMsgToAwtrixClients(6666,msg)
+            break
+        case 'notify':
             if(autoSendFlag == true){
                 autoSendFlag = false
                 setTimeout(function(){autoSendFlag = true},5000)
             }
-            sendMsgToAwtrixClients(6666,JSON.stringify(msg))
+            sendTextToESP(msg.text,msg.x,msg.y,msg.color)
+            break
+        default: 
             break
     }
 }
@@ -96,15 +103,15 @@ function sendMsgToAwtrixClients(port, msg) {
     }
 }
 
-function sendTextToESP(text){
+function sendTextToESP(text,x,y,color){
     var msg = new Object()
     msg['type'] = 'clear'
     sendMsgToAwtrixClients(6666,JSON.stringify(msg))
 
     msg['type'] = 'drawText'
-    msg['x'] = 2
-    msg['y'] = 1
-    msg['color'] = defaultColor
+    msg['x'] = x
+    msg['y'] = y
+    msg['color'] = color
     msg['text'] = text
 
     sendMsgToAwtrixClients(6666,JSON.stringify(msg))
