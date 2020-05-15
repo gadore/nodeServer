@@ -29,7 +29,7 @@ function handleTcpMessage(msg){
             break
         case 'setBrightness':
             brightness = msg.brightness
-            sendMsgToAwtrixClients(6666,msg)
+            sendMsgToAwtrixClients(6666,JSON.stringify(msg))
             break
         case 'notify':
             if(autoSendFlag == true){
