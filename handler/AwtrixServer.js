@@ -6,7 +6,7 @@ let tcpClient = []
 let hexType = true
 let headerSize = 2
 let defaultColor =[0,0,255]
-let brightness = 30
+let brightness = 50
 let clientBank = new Array()
 
 let autoSendFlag = true
@@ -38,7 +38,17 @@ function handleTcpMessage(msg){
             }
             sendTextToESP(msg.text,msg.x,msg.y,msg.color)
             break
+        case 'fill':
+            sendMsgToAwtrixClients(6666,JSON.stringify({type:'fill',color:msg.color}))
+            sendMsgToAwtrixClients(6666,JSON.stringify({type:'show'}))
+            break
+        case 'drawBMP':
+            sendMsgToAwtrixClients(6666,JSON.stringify(msg))
+            sendMsgToAwtrixClients(6666,JSON.stringify({type:'show'}))
+            break
         default: 
+            sendMsgToAwtrixClients(6666,JSON.stringify({"type":"fill","color":[255,0,0]}))
+            sendMsgToAwtrixClients(6666,JSON.stringify({"type":"show"}))
             break
     }
 }
