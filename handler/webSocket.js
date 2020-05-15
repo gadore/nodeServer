@@ -18,7 +18,7 @@ let Clients = new Map()
 
 // 实例化:
 const wss = new WebSocketServer({
-    port: 9988
+    port: 9989
 })
 
 function randomStatus(total, scope,constNum) {
