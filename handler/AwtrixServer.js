@@ -5,28 +5,36 @@ let tcpServer = []
 let tcpClient = []
 let hexType = true
 let headerSize = 2
+defaultColor =[0,0,255]
 let clientBank = new Array()
 
 let autoSendFlag = true
 
+let awtrixServer = createAwtrixServer(6666)
+
 setInterval(function(){
-    if(autoSendFlag == true){return}
+    if(autoSendFlag == false){return}
     sendTextToESP(getTimeStr())
 },1000)
 
 function handleTcpMessage(msg){
     var type = msg['type']
     switch(type){
-        case 'autoTime':
+        case 'setTime':
             autoSendFlag = !autoSendFlag
             break
+        case 'setColor':
+            defaultColor = msg['color']
+            break
         default: 
+            if(autoSendFlag == true){
+                autoSendFlag = false
+                setTimeout(function(){autoSendFlag = true},5000)
+            }
             sendMsgToAwtrixClients(6666,JSON.stringify(msg))
             break
     }
 }
-
-var awtrixServer = createAwtrixServer(6666)
 
 function createAwtrixServer(Port,tcpSocket) {
     try {
@@ -96,7 +104,7 @@ function sendTextToESP(text){
     msg['type'] = 'drawText'
     msg['x'] = 2
     msg['y'] = 1
-    msg['color'] = [0,0,255]
+    msg['color'] = defaultColor
     msg['text'] = text
 
     sendMsgToAwtrixClients(6666,JSON.stringify(msg))
