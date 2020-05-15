@@ -15,7 +15,7 @@ let awtrixServer = createAwtrixServer(6666)
 
 setInterval(function(){
     if(autoSendFlag == false){return}
-    sendTextToESP(getTimeStr())
+    sendTextToESP(getTimeStr(),2,1,[0,0,255])
 },1000)
 
 function handleTcpMessage(msg){
