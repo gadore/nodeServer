@@ -20,14 +20,14 @@ setInterval(function(){
 
 function handleTcpMessage(msg){
     var type = msg['type']
-    if(type == 'autoTime'){
-        autoSendFlag = !autoSendFlag
-        return
-    }else if(autoSendFlag == true){
+    if(autoSendFlag == true && type != 'autoTime' && type != 'setBrightness'){
         autoSendFlag = false
         setTimeout(function(){autoSendFlag = true},5000)
     }
     switch(type){
+        case 'autoTime':
+            autoSendFlag = !autoSendFlag
+            break
         case 'setColor':
             defaultColor = msg['color']
             break
@@ -69,8 +69,12 @@ function createAwtrixServer(Port,tcpSocket) {
             clientBank[port][parseInt(client.name)] = client
 
             client.on('data', function (msg) { //接收client发来的信息
-                var jsonMsg = JSON.parse(msg)
-                handleTcpMessage(jsonMsg)
+                try{
+                    var jsonMsg = JSON.parse(msg)
+                    handleTcpMessage(jsonMsg)
+                }catch(e){
+                    Logger.logError('client.on(data)',e)
+                }
             })
 
             client.on('error', function (e) { //监听客户端异常
