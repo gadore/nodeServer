@@ -20,10 +20,14 @@ setInterval(function(){
 
 function handleTcpMessage(msg){
     var type = msg['type']
+    if(type == 'autoTime'){
+        autoSendFlag = !autoSendFlag
+        return
+    }else if(autoSendFlag == true){
+        autoSendFlag = false
+        setTimeout(function(){autoSendFlag = true},5000)
+    }
     switch(type){
-        case 'autoTime':
-            autoSendFlag = !autoSendFlag
-            break
         case 'setColor':
             defaultColor = msg['color']
             break
@@ -32,10 +36,6 @@ function handleTcpMessage(msg){
             sendMsgToAwtrixClients(6666,JSON.stringify(msg))
             break
         case 'notify':
-            if(autoSendFlag == true){
-                autoSendFlag = false
-                setTimeout(function(){autoSendFlag = true},5000)
-            }
             sendTextToESP(msg.text,msg.x,msg.y,msg.color)
             break
         case 'fill':
