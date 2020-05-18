@@ -8,6 +8,7 @@ let headerSize = 2
 let defaultColor =[0,0,255]
 let brightness = 50
 let clientBank = new Array()
+let firstStart = true
 
 let autoSendFlag = true
 
@@ -67,6 +68,8 @@ function createAwtrixServer(Port,tcpSocket) {
             clients[client.name] = client // 将client保存在clients
 
             clientBank[port][parseInt(client.name)] = client
+
+            sendMsgToAwtrixClients(6666,JSON.stringify({"type":"setBrightness","brightness":50}))
 
             client.on('data', function (msg) { //接收client发来的信息
                 try{
