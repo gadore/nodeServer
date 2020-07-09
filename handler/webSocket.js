@@ -18,7 +18,7 @@ let Clients = new Map()
 
 // 实例化:
 const wss = new WebSocketServer({
-    port: 9989
+    port: 10663
 })
 
 function randomStatus(total, scope,constNum) {
@@ -53,7 +53,7 @@ function handleLogin(jsonMessage, clientId) {
     var ret = {
         "ServiceName": "UserLogin"
     }
-    if (username == 'admin' && password == 'Simba') {
+    if (username == 'admin' && password == 'admin') {
         Clients.get(clientId).login = true
         ret.Result = "Success"
         ret.Permissions = "1,2,3,4,5,6,7,8,9,10"
@@ -81,28 +81,28 @@ function test() {
     setInterval(function () {
         Clients.forEach(client => {
             if (client.login) {
+                // client.send(
+                //     `{"ServiceName":"Car","Layer":"1","Data": "${randomStatus(369,8)}" }`, (err) => {
+                //         if (err) Logger.getInstance().logError('websocket'+`[webSocket.sendMessageToClient] error: ${err}`)
+                //     }
+                // )
                 client.send(
-                    `{"ServiceName":"Car","Data": "${randomStatus(242,8)}" }`, (err) => {
-                        if (err) Logger.getInstance().logError('websocket'+`[webSocket.sendMessageToClient] error: ${err}`)
-                    }
-                )
-                client.send(
-                    `{"ServiceName":"Chute","Data": "${randomStatus(200,4)}" }`, (err) => {
+                    `{"ServiceName":"Chute","Layer":"1","Data": "${randomStatus(399,4)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
                 client.send(
-                    `{"ServiceName":"Plat","Data": "${randomStatus(12,5)}" }`, (err) => {
+                    `{"ServiceName":"Plat","Layer":"1","Data": "${randomStatus(12,5)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
                 client.send(
-                    `{"ServiceName":"Motor","Data": "${randomStatus(14,5)}" }`, (err) => {
+                    `{"ServiceName":"Motor","Layer":"1","Data": "${randomStatus(14,5)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
                 client.send(
-                    `{"ServiceName":"Emergency","Data": "${randomStatus(9,3)}" }`, (err) => {
+                    `{"ServiceName":"Emergency","Layer":"1","Data": "${randomStatus(9,3)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
@@ -112,12 +112,12 @@ function test() {
                     }
                 )
                 client.send(
-                    `{"ServiceName":"GrayScanner","Data": "${randomStatus(40,3)}" }`, (err) => {
+                    `{"ServiceName":"GrayScanner","Layer":"1","Data": "${randomStatus(40,3)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
                 client.send(
-                    `{"ServiceName":"OBRScanner","Data": "${randomStatus(2,3)}" }`, (err) => {
+                    `{"ServiceName":"OBRScanner","Layer":"1","Data": "${randomStatus(2,3)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
@@ -127,7 +127,7 @@ function test() {
                     }
                 )
                 client.send(
-                    `{"ServiceName":"SortorDropSlot","Slot": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
+                    `{"ServiceName":"SortorDropSlot","Layer":"1","Slot": "${randomStatus(1,200)}","TimeStamp":${currentTime()} }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
@@ -137,15 +137,15 @@ function test() {
                     }
                 )
                 client.send(
-                    `{"ServiceName":"SlotLock","Slot": "${randomStatus(1,200)}" }`, (err) => {
+                    `{"ServiceName":"SlotLock","Layer":"1","Slot": "${randomStatus(1,200)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
-                client.send(
-                    `{"ServiceName":"Notify","Message": "notify message" }`, (err) => {
-                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                    }
-                )
+                // client.send(
+                //     `{"ServiceName":"Notify","Message": "server test notify message" }`, (err) => {
+                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                //     }
+                // )
                 client.send(
                     `{"ServiceName":"ServerStatus","StatusData":[{"ServerName":"MainServer","CPU":"${randomStatus(1,100)}",
                     "Memory":"${randomStatus(1,100)}","HDD":"${randomStatus(1,100)}" } ] }`, (err) => {
@@ -164,7 +164,23 @@ function test() {
                 )
             }
         })
-    }, 1 * 2 * 1000)
+    }, 1 * 3 * 1000)
+    setInterval(function () {
+        Clients.forEach(client => {
+            if (client.login) {
+                client.send(
+                    `{"ServiceName":"Car","Layer":"2","Data": "${randomStatus(369,8)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError('websocket'+`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Car","Layer":"1","Data": "0,1,2,3,4,5,6,7,8,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3" }`, (err) => {
+                        if (err) Logger.getInstance().logError('websocket'+`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+            }
+        })
+    }, 1 * 1 * 1000)
 }
 
 function init(args) {
