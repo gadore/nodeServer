@@ -37,6 +37,11 @@ Logger.prototype.logInfo = function (methodName,content) {
     this.logger.info(logInfo);
 };
 
+Logger.prototype.sql = function (content) {
+    this.logger.level = '';
+    this.logger.info(content);
+};
+
 Logger.prototype.logWarn = function (methodName,content) {
     const logInfo = `[${methodName}]--${content}`;
     this.logger.level = 'warn';

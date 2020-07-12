@@ -1,6 +1,5 @@
 const mysql = require('mysql')
 const Logger = require('../handler/logger')
-const httpClient = require('../handler/HttpClient')
 
 var pool = mysql.createPool({
     host: '127.0.0.1',
@@ -52,7 +51,9 @@ function updateReceiveBank(id,newDate,newPrice,newNum){
 
 let receiveBank
 let sendBank
-let saveBank
+let saveBank = {}
+let monthIndexBank = []
+let erpIdIndexBank = []
 try {
     pool.getConnection(function(err,connection){
         if(err){
@@ -74,9 +75,9 @@ try {
                         //获取入库信息
                         receiveBank = results
                         connection.release()
-                        handleSaveTable()
                         // Logger.getInstance().logInfo('DbManager', 'receiveBank init success')
                         start()
+                        handleSaveTable()
                     }
                 })
             }
@@ -87,11 +88,26 @@ try {
     Logger.getInstance().logError('DbManager', e)
 }
 
-// function handleSaveTable(){
-//     for(let s = 0; s < sendBank.length; s++){
-//         //
-//     }
-// }
+function handleSaveTable(){
+    console.log(JSON.stringify(monthIndexBank))
+    console.log(JSON.stringify(erpIdIndexBank))
+    try{
+        for(let m = 0; m < monthIndexBank.length; m++){
+            let monthData = saveBank[monthIndexBank[m]]
+            if(monthData != undefined){
+                for(let e = 0; e < erpIdIndexBank.length;e++){
+                    let erpData = monthData[erpIdIndexBank[e]]
+                    if(erpData != undefined){console.log('月份:'+ monthIndexBank[m] + '识别码:' + erpIdIndexBank[e] + ' 入库数量:'+ erpData['receive_sum'] + ' 入库总额:' + erpData['receive_total_price'] + ' 出库数量:' + erpData['send_sum'])}
+                    // Logger.getInstance().sql('月份:'+ monthIndexBank[m] + '识别码:' + erpIdIndexBank[e] + ' 入库数量:'+ erpData['receive_sum'] + ' 入库总额:' + erpData['receive_total_price'] + ' 出库数量:' + erpData['send_sum'])
+                }
+            }else{
+                console.log('月数据为空')
+            }
+        }
+    }catch(e){
+        console.log(e.message)
+    }
+}
 
 function currentMonthPrice(month){
 
@@ -100,74 +116,53 @@ function currentMonthPrice(month){
 
     let commonPriceBank = {}
     try{
-        //计算当月物料加权平均值
-        for(let i=0;i<receiveBank.length;i++){
-
-            let recData = receiveBank[i]
-            let recMonth = getSameMonthString(recData['入库时间'])
+        for(let r = 0;r < receiveBank.length;r++){
+            let recData = receiveBank[r]
+            let recTime = recData['入库时间']
+            let repId = recData['识别码']
+            let recCount = recData['原始数量']
             let recPrice = recData['不含税单价']
-            let recCount = recData['原始数量1']
-            let recErpId = recData['识别码']
 
-            if(recMonth != month){
+            //拦截非当月数据
+            if(getSameMonthString(recTime) != month){
                 continue
             }
 
-            if(commonPriceBank[recErpId] == undefined){
-                commonPriceBank[recErpId] = {price:0,count:0,result:0}
+            if(saveBank[month] == undefined){
+                saveBank[month] = []
             }
 
-            commonPriceBank[recErpId].price += recPrice*recCount
-            commonPriceBank[recErpId].count += recCount
+            if(saveBank[month][repId] == undefined){
+                saveBank[month][repId] = {
+                    receive_total_price:0,
+                    receive_sum:0,
+                    send_sum:0,
+                    send_total_price:0,
+                    send_price:0,
+                    save_sum:0,
+                    save_total_price:0,
+                    save_price:0
+                }
+            }
+
+            saveBank[month][repId].receive_total_price += recPrice * recCount
+            saveBank[month][repId].receive_sum += recCount
         }
 
-        //更新receive的加权平均单价
-        for(let j=0;j<receiveBank.length;j++){
+        for(let s = 0;s < sendBank.length;s++){
+            let sendData = sendBank[s]
+            let sendTime = sendData['修改出库时间0421']
+            let repId = sendData['识别码']
+            let sendCount = sendData['领用数量']
 
-            let recData = receiveBank[j]
-            let recDate = recData['入库时间']
-            let recMonth = getSameMonthString(recData['入库时间'])
-            let recErpId = recData['识别码']
-            let recCount = recData['原始数量1']
-            let recId = recData['id']
-
-            if(recMonth != month){
+            if(getSameMonthString(sendTime) != month || saveBank[month] == undefined || saveBank[month][repId] == undefined){
                 continue
             }
 
-            if(commonPriceBank[recErpId] == undefined){
-                continue
-            }
-
-            let resultPrice = parseFloat(commonPriceBank[recErpId].price/commonPriceBank[recErpId].count)
-
-            updateReceiveBank(recId,getTimeString(recDate),resultPrice,recCount)
-        }
-
-        //更新send的加权平均单价
-        for(let k=0;k<sendBank.length;k++){
-
-            let recData = sendBank[k]
-            let recMonth = getSameMonthString(recData['修改出库时间0421'])
-            let recErpId = recData['识别码']
-            let recId = recData['id']
-
-            // console.log(JSON.stringify(recData))
-
-            if(recMonth != month){
-                continue
-            }
-
-            if(commonPriceBank[recErpId] == undefined){
-                continue
-            }
-
-            let resultPrice = parseFloat(commonPriceBank[recErpId].price/commonPriceBank[recErpId].count)
-
-            updateSendBankPrice(recId,resultPrice)
+            saveBank[month][repId].send_sum += sendCount
         }
     }catch(e){
-        console.log(e)
+        console.log(e.message)
     }
 
     commonPriceBank = {}
@@ -180,6 +175,15 @@ function start() {
     for (let i = 0; i < sendBank.length; i++) {
 
         let currentMonthString = getSameMonthString(sendBank[i]['修改出库时间0421'])
+
+        if(monthIndexBank.indexOf(currentMonthString) < 0){
+            monthIndexBank.push(currentMonthString)
+            Logger.getInstance().logInfo(currentMonthString)
+        }
+
+        if(erpIdIndexBank.indexOf(erpId) < 0){
+            erpIdIndexBank.push(erpId)
+        }
 
         //月份变动表明月份更替，更替时更新上月数据
         if(currentMonthString != sameMonthString){
@@ -256,6 +260,7 @@ function start() {
                 currentMonthPrice(sameMonthString)
                 // Logger.getInstance().logInfo('start', '更新' + sameMonthString + ' 数据 完毕')
                 console.log('更新' + sameMonthString + ' 数据 完毕')
+                // console.log(saveBank)
             }
 
             //未领用完毕的做提示

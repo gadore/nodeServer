@@ -81,18 +81,18 @@ function test() {
     setInterval(function () {
         Clients.forEach(client => {
             if (client.login) {
-                // client.send(
-                //     `{"ServiceName":"Car","Layer":"1","Data": "${randomStatus(369,8)}" }`, (err) => {
-                //         if (err) Logger.getInstance().logError('websocket'+`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
                 client.send(
                     `{"ServiceName":"Chute","Layer":"1","Data": "${randomStatus(399,4)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
                 client.send(
-                    `{"ServiceName":"Plat","Layer":"1","Data": "${randomStatus(12,5)}" }`, (err) => {
+                    `{"ServiceName":"Plat","Layer":1,"Data": "${randomStatus(12,5)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Plat","Layer":2,"Data": "${randomStatus(12,5)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
@@ -102,7 +102,12 @@ function test() {
                     }
                 )
                 client.send(
-                    `{"ServiceName":"Emergency","Layer":"1","Data": "${randomStatus(9,3)}" }`, (err) => {
+                    `{"ServiceName":"Emergency","Layer":"1","Data": "${randomStatus(34,3)}" }`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
+                client.send(
+                    `{"ServiceName":"Emergency","Layer":"2","Data": "${randomStatus(12,3)}" }`, (err) => {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
@@ -141,11 +146,11 @@ function test() {
                         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
                     }
                 )
-                // client.send(
-                //     `{"ServiceName":"Notify","Message": "server test notify message" }`, (err) => {
-                //         if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                //     }
-                // )
+                client.send(
+                    `{"Status":5,"Speed":2,"ServiceName":"CrossPlcStatus","Model":0,"Layer":2,"Machine":"001"}`, (err) => {
+                        if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                    }
+                )
                 client.send(
                     `{"ServiceName":"ServerStatus","StatusData":[{"ServerName":"MainServer","CPU":"${randomStatus(1,100)}",
                     "Memory":"${randomStatus(1,100)}","HDD":"${randomStatus(1,100)}" } ] }`, (err) => {
@@ -212,7 +217,7 @@ function init(args) {
             }
         }
     })
-    Logger.getInstance().logInfo('websocket', 'webSocket started on port 9989')
+    Logger.getInstance().logInfo('websocket', 'webSocket started on port 10663')
     if (args == 'test'){
         test()
         Logger.getInstance().logInfo('websocket', 'start test function success')
