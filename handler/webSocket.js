@@ -17,6 +17,9 @@ const WebSocketServer = WebSocket.Server
 let Clients = new Map()
 let brightness = 30
 let color = [0, 255, 0]
+let message = 'nothing'
+let clockFlag = true
+let notifyTimer
 let x = 2
 let y = 1
 
@@ -65,10 +68,30 @@ function handleJsonMessage(msg, clientId) {
             case 'setBrightness':
                 brightness = jsonMessage.brightness
                 break
+            case 'notify':
+                clockFlag = false
+                message = jsonMessage.message
+                notify()
+                if(notifyTimer != undefined){
+                    clearInterval(notifyTimer)
+                }
+                notifyTimer = setTimeout(()=>{
+                    clockFlag = true
+                },5000)
+                break
+            case 'clock':
+                clockFlag = true
+                break
+            case 'display':
+                clockFlag = false
+                message = jsonMessage.message
+                notify()
+                break
 
         }
     } catch (e) {
-        Logger.logError('websocket.handleJsonMessage',JSON.stringify(e))
+        // Logger.logError('websocket.handleJsonMessage',JSON.stringify(e))
+        console.log(e)
     }
 }
 
@@ -102,8 +125,36 @@ function handleLogin(jsonMessage, clientId) {
     }
 }
 
+function notify() {
+    Clients.forEach(client => {
+        client.send(
+            JSON.stringify({ "ServiceName": "clear" }), (err) => {
+                if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+            }
+        )
+        client.send(
+            JSON.stringify({ "ServiceName": "setBrightness", "brightness": brightness }), (err) => {
+                if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+            }
+        )
+        client.send(
+            JSON.stringify({ "ServiceName": "drawText", "text": message, "color": color, "x": x, "y": y }), (err) => {
+                if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+            }
+        )
+        client.send(
+            JSON.stringify({ "ServiceName": "show" }), (err) => {
+                if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+            }
+        )
+    })
+}
+
 function test() {
     setInterval(function () {
+        if(clockFlag == false){
+            return
+        }
         Clients.forEach(client => {
             client.send(
                 JSON.stringify({ "ServiceName": "clear" }), (err) => {
