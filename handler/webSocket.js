@@ -87,6 +87,21 @@ function handleJsonMessage(msg, clientId) {
                 message = jsonMessage.message
                 notify()
                 break
+            default: 
+                clockFlag = false
+                Clients.forEach(client => {
+                    client.send(
+                        JSON.stringify(jsonMessage), (err) => {
+                            if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                        }
+                    )
+                    client.send(
+                        JSON.stringify({ "ServiceName": "show" }), (err) => {
+                            if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
+                        }
+                    )
+                })
+                break
 
         }
     } catch (e) {
