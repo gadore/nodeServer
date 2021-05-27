@@ -162,7 +162,7 @@ function test() {
             temperature = String(parseInt(e))
         })
         Clients.forEach(client => {
-            utils.drawCpuUsage.forEach(msg => { client.send(JSON.stringify(msg)) })
+            utils.drawCpuUsage().forEach(msg => { client.send(JSON.stringify(msg)) })
             client.send(JSON.stringify({ "ServiceName": "drawText", "text": temperature, "color": [19,161,14], "x": 25, "y": 0 }))
             client.send(JSON.stringify({ "ServiceName": "drawText", "text": getTimeStr(), "color": color, "x": 0, "y": 0 }))
         })
