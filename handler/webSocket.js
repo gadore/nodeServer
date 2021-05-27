@@ -162,6 +162,9 @@ function test() {
             temperature = String(parseInt(e))
         })
         Clients.forEach(client => {
+            client.send(JSON.stringify({ServiceName:'clear'}))
+            utils.drawCpuUsageFrame().forEach(msg => { client.send(JSON.stringify(msg)) })
+            utils.drawTemperatureIcon().forEach(msg => { client.send(JSON.stringify(msg)) })
             utils.drawCpuUsage().forEach(msg => { client.send(JSON.stringify(msg)) })
             client.send(JSON.stringify({ "ServiceName": "drawText", "text": temperature, "color": [19,161,14], "x": 25, "y": 0 }))
             client.send(JSON.stringify({ "ServiceName": "drawText", "text": getTimeStr(), "color": color, "x": 0, "y": 0 }))
@@ -176,24 +179,10 @@ function init(args) {
         ws.to = 'server'
         ws.login = false
         Clients.set(ws.uuid, ws)
-        Logger.getInstance().logInfo('websocket', `connection() clientId:${ws.uuid}`);
-        ws.send(`CONNECT: clientId: + ${ws.uuid}`, (err) => {
-            if (err) {
-                Logger.getInstance().logError('websocket', `error: ${err}`)
-            }
-        })
-        utils.drawCpuUsageFrame().forEach(msg => { ws.send(JSON.stringify(msg)) })
-        utils.drawTemperatureIcon().forEach(msg => { ws.send(JSON.stringify(msg)) })
-        ws.send(JSON.stringify({ServiceName:'show'}))
         ws.on('message', function (message) {
             Clients.set(ws.uuid, ws)
             handleJsonMessage(message, ws.uuid)
             Logger.getInstance().logInfo('websocket', `Received: ${message}`)
-            // ws.send(`ECHO: ${message}`, (err) => {
-            //     if (err) {
-            //         Logger.getInstance().logError('websocket', `error: ${err}`)
-            //     }
-            // })
         })
         ws.onclose = function (ws) {
             if (ws.target.uuid != undefined) {
