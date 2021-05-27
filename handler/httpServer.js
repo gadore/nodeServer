@@ -8,10 +8,7 @@ const server = http.createServer((req, res) => {
     try {
 
         if (req.method === 'OPTIONS') {
-            // console.log('!OPTIONS');
             var headers = {};
-            // IE8 does not allow domains to be specified, just the *
-            // headers["Access-Control-Allow-Origin"] = req.headers.origin;
             headers["Access-Control-Allow-Origin"] = "*";
             headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
             headers["Access-Control-Allow-Credentials"] = false;
@@ -20,11 +17,8 @@ const server = http.createServer((req, res) => {
             res.writeHead(200, headers);
             res.end();
         } else {
-            // console.log('else')
             res.setHeader('Access-Control-Allow-Origin', '*');
-            // res.setHeader('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
             res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Engaged-Auth-Token");
-            // res.setHeader('content-type', 'application/json;charset=utf-8');
             router.handler(pathName, req, res)
         }
     } catch (err) {
@@ -36,7 +30,7 @@ const server = http.createServer((req, res) => {
     }
 })
 
-server.listen('2333')
-Logger.getInstance().logInfo('App.js', 'Server openned on port 2333')
+server.listen(80)
+Logger.getInstance().logInfo('App.js', 'Server openned on port 80')
 
 module.exports = this

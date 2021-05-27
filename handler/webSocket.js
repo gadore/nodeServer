@@ -1,6 +1,7 @@
 const WebSocket = require('ws')
 const uuid = require('uuid')
 const Logger = require('./logger')
+const utils = require('./utils')
 
 //  state.websock.readyState =>
 //  ###########################
@@ -22,32 +23,22 @@ let clockFlag = true
 let notifyTimer
 let x = 2
 let y = 1
+let temperature = '00'
 
 // 实例化:
 const wss = new WebSocketServer({
     port: 10663
 })
 
-function randomStatus(total, scope, constNum) {
-    var res = ''
-    for (var i = 0; i < total; i++) {
-        var tempNum = Math.random() * scope
-        tempNum = Math.round(tempNum)
-        tempNum = constNum == undefined ? tempNum : constNum
-        res = res.length == 0 ? res + tempNum : res + ',' + tempNum
-    }
-    return res
-}
-
 function getTimeStr() {
     var now = new Date()
     var hour = now.getHours()
     var minute = now.getMinutes()
-    var seconds = now.getSeconds()
+    // var seconds = now.getSeconds()
     var hourStr = hour > 9 ? hour : '0' + hour
     var minuteStr = minute > 9 ? minute : '0' + minute
-    var secondsStr = seconds > 9 ? seconds : '0' + seconds
-    return hourStr + ':' + minuteStr + ':' + secondsStr
+    // var secondsStr = seconds > 9 ? seconds : '0' + seconds
+    return hourStr + ':' + minuteStr
 }
 
 function handleJsonMessage(msg, clientId) {
@@ -102,7 +93,6 @@ function handleJsonMessage(msg, clientId) {
                     )
                 })
                 break
-
         }
     } catch (e) {
         // Logger.logError('websocket.handleJsonMessage',JSON.stringify(e))
@@ -167,30 +157,14 @@ function notify() {
 
 function test() {
     setInterval(function () {
-        if(clockFlag == false){
-            return
-        }
+        if (clockFlag == false) { return }
+        utils.temperatureMonitor((e)=>{
+            temperature = String(parseInt(e))
+        })
         Clients.forEach(client => {
-            client.send(
-                JSON.stringify({ "ServiceName": "clear" }), (err) => {
-                    if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                }
-            )
-            client.send(
-                JSON.stringify({ "ServiceName": "setBrightness", "brightness": brightness }), (err) => {
-                    if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                }
-            )
-            client.send(
-                JSON.stringify({ "ServiceName": "drawText", "text": getTimeStr(), "color": color, "x": x, "y": y }), (err) => {
-                    if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                }
-            )
-            client.send(
-                JSON.stringify({ "ServiceName": "show" }), (err) => {
-                    if (err) Logger.getInstance().logError(`[webSocket.sendMessageToClient] error: ${err}`)
-                }
-            )
+            utils.drawCpuUsage.forEach(msg => { client.send(JSON.stringify(msg)) })
+            client.send(JSON.stringify({ "ServiceName": "drawText", "text": temperature, "color": [19,161,14], "x": 25, "y": 0 }))
+            client.send(JSON.stringify({ "ServiceName": "drawText", "text": getTimeStr(), "color": color, "x": 0, "y": 0 }))
         })
     }, 1 * 1000)
 }
@@ -207,6 +181,8 @@ function init(args) {
                 Logger.getInstance().logError('websocket', `error: ${err}`)
             }
         })
+        utils.drawCpuUsageFrame().forEach(msg => { ws.send(JSON.stringify(msg)) })
+        utils.drawTemperatureIcon().forEach(msg => { ws.send(JSON.stringify(msg)) })
         ws.on('message', function (message) {
             Clients.set(ws.uuid, ws)
             handleJsonMessage(message, ws.uuid)
