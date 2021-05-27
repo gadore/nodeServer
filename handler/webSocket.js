@@ -165,6 +165,7 @@ function test() {
             utils.drawCpuUsage().forEach(msg => { client.send(JSON.stringify(msg)) })
             client.send(JSON.stringify({ "ServiceName": "drawText", "text": temperature, "color": [19,161,14], "x": 25, "y": 0 }))
             client.send(JSON.stringify({ "ServiceName": "drawText", "text": getTimeStr(), "color": color, "x": 0, "y": 0 }))
+            client.send(JSON.stringify({ServiceName:'show'}))
         })
     }, 1 * 1000)
 }
@@ -183,6 +184,7 @@ function init(args) {
         })
         utils.drawCpuUsageFrame().forEach(msg => { ws.send(JSON.stringify(msg)) })
         utils.drawTemperatureIcon().forEach(msg => { ws.send(JSON.stringify(msg)) })
+        ws.send(JSON.stringify({ServiceName:'show'}))
         ws.on('message', function (message) {
             Clients.set(ws.uuid, ws)
             handleJsonMessage(message, ws.uuid)
