@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
     }
 })
 
-server.listen(80)
-Logger.getInstance().logInfo('App.js', 'Server openned on port 80')
+server.listen(2333)
+Logger.getInstance().logInfo('App.js', 'Server openned on port 2333')
 
 module.exports = this

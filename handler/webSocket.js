@@ -2,6 +2,7 @@ const WebSocket = require('ws')
 const uuid = require('uuid')
 const Logger = require('./logger')
 const utils = require('./utils')
+const spawn = require('child_process').spawn
 
 //  state.websock.readyState =>
 //  ###########################
@@ -23,7 +24,7 @@ let clockFlag = true
 let notifyTimer
 let x = 2
 let y = 1
-let temperature = '00'
+let temperatureNum = '00'
 
 // 实例化:
 const wss = new WebSocketServer({
@@ -158,19 +159,20 @@ function notify() {
 function test() {
     setInterval(function () {
         if (clockFlag == false) { return }
-        utils.temperatureMonitor((e)=>{
-            temperature = String(parseInt(e))
-        })
+        const temp = spawn('cat', ['/sys/class/thermal/thermal_zone0/temp'])
+        temp.stdout.on('data', function(data) { temperatureNum = parseInt(data/1000) })
         Clients.forEach(client => {
             client.send(JSON.stringify({ServiceName:'clear'}))
             utils.drawCpuUsageFrame().forEach(msg => { client.send(JSON.stringify(msg)) })
             utils.drawTemperatureIcon().forEach(msg => { client.send(JSON.stringify(msg)) })
             utils.drawCpuUsage().forEach(msg => { client.send(JSON.stringify(msg)) })
-            client.send(JSON.stringify({ "ServiceName": "drawText", "text": temperature, "color": [19,161,14], "x": 25, "y": 0 }))
-            client.send(JSON.stringify({ "ServiceName": "drawText", "text": getTimeStr(), "color": color, "x": 0, "y": 0 }))
+            utils.drawMemoryUsage().forEach(msg => { client.send(JSON.stringify(msg)) })
+            client.send(JSON.stringify({ "ServiceName": "drawText", "text": temperatureNum, "color": [240,61,14], "x": 25, "y": 0 }))
+            client.send(JSON.stringify({ "ServiceName": "drawText", "text": getTimeStr(), "color": [180,240,240], "x": 0, "y": 0 }))
             client.send(JSON.stringify({ServiceName:'show'}))
+            
         })
-    }, 1 * 1000)
+    }, 2 * 1000)
 }
 
 function init(args) {

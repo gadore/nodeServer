@@ -1,15 +1,20 @@
 const deelQuerySlotsRequest = require('../routers/deelQuerySlotsRequest')
 const deelPacketOffRequest = require('../routers/deelPacketOffRequest')
-const fetchMusic = require('../routers/fetchMusicList')
+const SlotStatus = require('../routers/SlotStatus')
 const api = require('../routers/api')
-const fetchCover = require('../routers/fetchMusicCover')
+const allocBoxCode = require('../routers/allocBoxCode')
+const slotPrint = require('../routers/slotPrint')
+const fetchLuolicon = require('../routers/fetchLuolicon')
+const Logger = require('./logger')
 
 var router = {
     handler: function (pathName, req, res) {
         switch(pathName){
-            case '/api/v1/equipment/order/check' : deelQuerySlotsRequest(res,req)
+            case '/AutoSort/Sort' : deelQuerySlotsRequest(res,req)
                 return
-            case '/api/v1/equipment/port/response' : deelPacketOffRequest(res,req)
+            case '/luolicon' : fetchLuolicon(res,req)
+                return
+            case '/AutoSort/DropChute' : deelPacketOffRequest(res,req)
                 return
             case '/Api/authority/User/getLogin':
             case '/Api/authority/Role/getThreeMenuList':
@@ -17,19 +22,24 @@ var router = {
                 return
             case '/music' : fetchMusic(res,req)
                 return
-            case '/cover' : fetchCover(res,req)
+            case '/AutoSort/CreateBatch' : allocBoxCode(res,req)
+                return
+            case '/AutoSort/LockChute': SlotStatus(res, req)
+                return
+            case '/AutoSort/ChutePrint': slotPrint(res, req)
                 return
             default:
-                notfound(res)
+                notfound(pathName, res)
                 return
         }
     }
 }
 
-var notfound = function (res) {
+var notfound = function (pathName, res) {
     res.writeHead(404)
     res.write('404')
     res.end()
+    Logger.getInstance().logError('router.js', '【404】No handler for: ' + pathName)
 }
 
 module.exports = router
