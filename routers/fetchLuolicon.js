@@ -7,23 +7,32 @@ const pageEndFix = '</div></body></html>'
 
 function fetchLuolicon(res,req) {
     try{
-    var musicUrl = 'https://api.lolicon.app/setu/v2?r18=2&num=9'
+	let hour = new Date().getHours()
+	let isNight = false
+	if (hour >= 18 || hour <= 6) { isNight = true }
+    	var musicUrl = 'https://api.lolicon.app/setu/v2?r18=2&num=12'
         request(musicUrl, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 let imgStr = ''
                 const imgDatas = JSON.parse(response.body).data
                 imgDatas.forEach(item => {
-                    imgStr += `<div class="col-lg-9 col-md-4 col-sm-1" style="position:relative;margin-top: 10px;"><img src="${item.urls.original}" class="img-fluid" alt="" style="padding: 10px;width: 100%;background-color: #f1f3f4;"><span style="position: absolute;
+                    imgStr += `<div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-12" style="position:relative;margin-top: 10px;"><img src="${item.urls.original}" class="img-fluid" alt="" style="padding: 10px;width: 100%;background-color: ${isNight ? 'gray' : '#f1f3f4'};"><span style="position: absolute;
                     left: 10px;
                     bottom: 0;
-                    background: #f1f3f4;
+		    color: ${isNight ? 'white' : 'black'};
+		    background: ${isNight ? 'gray' : '#f1f3f4'};
                     opacity: 0.6;
+		    word-wrap: break-word;
+		    white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
                     width: calc(100% - 20px);
                     overflow: hidden;">${item.tags.toString()}</span></div>`
                 })
+		let styleStr =`<style>body{ background-color: ${isNight? 'black':'white'} }</style>`
                 // res.setHeader('Content-Type','text/plain;charset=utf-8');
                 res.writeHead(200)
-                res.write(pageStr + imgStr + pageEndFix)
+                res.write(pageStr + imgStr + styleStr + pageEndFix)
                 res.end()
             }else{
                 res.writeHead(200)
