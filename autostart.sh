@@ -1,6 +1,6 @@
- nohup node /home/pi/Documents/development/node-server/App.js&
+ nohup node /path/to/node-server/App.js&
  echo "###########################"
  echo "#                         #"
- echo "# App start on port 9988  #"
+ echo "# App start on port 2333  #"
  echo "#                         #"
  echo "###########################"
